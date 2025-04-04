@@ -4,19 +4,10 @@ import socket
 
 ap = network.WLAN (network.AP_IF)
 ap.active (True)
-ap.config (essid = 'ESP32-WIFI-NAME')
-ap.config (authmode = 3, password = 'WiFi-password')
+ap.config (essid = 'ESP32-Group-1', authmode = 3, password = 'ra2ra2ra2')
 
-pins = [machine.Pin(i, machine.Pin.IN) for i in (0, 2, 4, 5, 12, 13, 14, 15)]
-
-html = """<!DOCTYPE html>
-<html>
-    <head> <title>ESP32 Pins</title> </head>
-    <body> <h1>ESP32 Pins</h1>
-        <table border="1"> <tr><th>Pin</th><th>Value</th></tr> %s </table>
-    </body>
-</html>
-"""
+pin_numbers = (13, 12, 27, 33, 15, 32, 14, 22, 23)
+pins = [machine.Pin(i, machine.Pin.IN) for i in pin_numbers]
 
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 
@@ -25,6 +16,12 @@ s.bind(addr)
 s.listen(1)
 
 print('listening on', addr)
+
+try:
+    with open('index.html', 'r') as f:
+        html = f.read()
+except:
+    FileNotFoundError('index.html not found')
 
 while True:
     cl, addr = s.accept()
@@ -35,7 +32,7 @@ while True:
         #print(line)
         if not line or line == b'\r\n':
             break
-    rows = ['<tr><td>%s</td><td>%d</td></tr>' % (str(p), p.value()) for p in pins]
+    rows = ['<tr><td>%d</td><td>%d</td></tr>' % (pin_numbers[i], pins[i].value()) for i in range(len(pins))]
     response = html % '\n'.join(rows)
     cl.send(response)
     cl.close()
