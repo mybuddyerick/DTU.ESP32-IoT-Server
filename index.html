@@ -2,18 +2,22 @@
 <html>
     <head>
         <title>Group 1 - Internet-of-Things node</title>
+        <meta charset="utf-8">
     </head>
     <body>
-        <h1>ESP32 Pin Status</h1>
-        <p>The current Pin configuration is the following:</p>
-        <table>
+        <h1>ESP32 Status Dashboard</h1>
+
+        <h2>Pin Configuration</h2>
+        <p>The current pin states are:</p>
+        <table border="1" cellpadding="5" cellspacing="0">
             <tr><th>Pin</th><th>Value</th></tr>
             %s
         </table>
 
-        <h2>ESP32 Temperature Sensor</h2>
-        <p>Fancy temperature sensor goes brrrrrt</p>
-        <p>Temp</p>
+        <h2>Temperature Sensor</h2>
+        <p id="temp-value">Reading...</p>
 
+        <h2>Potentiometer</h2>
+        <p id="pot-value">Reading...</p>
     </body>
 </html>

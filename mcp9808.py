@@ -1,4 +1,4 @@
-from machine import I2C
+from machine import I2C, Pin
 from micropython import const
 
 # Default I2C address and register for temperature reading.

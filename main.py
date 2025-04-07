@@ -1,5 +1,4 @@
-from server import *
-from mcp9808 import *
+from engine import *
 
 '''
 
@@ -13,13 +12,18 @@ PIN Location
 
 #################
 # Potentiometer #
-#      12       #
+#      39       #
 #################
 
 #############
 #  RGB LED  #
-#   red 27  #
-# green 15  #
-#  blue 32  #
+#   red 12  #
+# green 33  #
+#  blue 15  #
 #############
+
+##########
+# Button #
+#   25   #
+##########
 '''
