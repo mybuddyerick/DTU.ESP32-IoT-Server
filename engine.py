@@ -15,9 +15,9 @@ pot.width(ADC.WIDTH_12BIT)
 
 # -- RGB setup --
 
-red_pwm = PWM(Pin(12), freq=50)
-green_pwm = PWM(Pin(33), freq=50)
-blue_pwm = PWM(Pin(15), freq=50)
+red_pwm = PWM(Pin(12), freq=10000)
+green_pwm = PWM(Pin(33), freq=10000)
+blue_pwm = PWM(Pin(15), freq=10000)
 
 # -- RGB color functions --
 
@@ -36,38 +36,27 @@ def set_red(pwm):
     green_pwm.duty(pwm)
     blue_pwm.duty(pwm)
 
-def set_off():
-    red_pwm.duty(0)
-    green_pwm.duty(0)
-    blue_pwm.duty(0)
-
 # -- loop --
 
 def run_engine():
     while True:
         # Read potentiometer and map to 0–1023 for brightness
         val = pot.read()
-        val = 1 - (val/4095)
+        val = val/4095
         pwm = int(1023 * val)
 
         temp = sensor.temperature
-        print(f"Potentiometer: {val:.3f} | PWM: {pwm} | Temperature: {temp:.2f} °C")
+        print(f"\rPotentiometer: {val:.3f} | PWM: {pwm} | Temperature: {temp:.2f} °C", end='')
 
-        if int(pwm) == 0:
-            set_off()
-            time.sleep(0.2)
-            continue
-
-        if temp < 27:
+        if temp < 23:
             set_green(pwm)
-        elif temp < 28:
+        elif temp < 24.5:
             set_blue(pwm)
         else:
             set_red(pwm)        
         time.sleep(0.2)
 
 run_engine()
-
 
 def update_led_color():
     pot_val = pot.read()

@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+pymakr.conf
+
 # User-specific files
 *.rsuser
 *.suo
