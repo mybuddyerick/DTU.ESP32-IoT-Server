@@ -1,21 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Group 1 - Internet-of-Things node</title>
+        <title>ESP32 Dashboard</title>
         <meta charset="utf-8">
-    </head>
-    <body>
-        <h1>ESP32 Status Dashboard</h1>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 40px;
+                padding-bottom: 40px;
+                background-color: #e6f2f0;
+            }
+            h1 {
+                font-size: 40px;
+                font-family: Helvetica, sans-serif;
+                font-weight: 100;
+                letter-spacing: 1px;
+            }
+            h2 {
+                font-size: 30px;
+                font-family: Helvetica, sans-serif;
+                font-weight: 100;
+            }
+            p {
+                font-size: 20px;
+                font-family: Helvetica, sans-serif;
+                font-weight: 100;
+                margin: 0;
+            }
 
-        <h2>Pin Configuration</h2>
-        <p>The current pin states are:</p>
-        <table border="1" cellpadding="5" cellspacing="0">
-            <tr><th>Pin</th><th>Value</th></tr>
-            %s
-        </table>
+            table {
+                font-family: Helvetica, sans-serif;
+                border-collapse: collapse;
+                border-spacing: 0;
+                width: 50%;
+                margin-top: 0;
+                text-align: center;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
+                border-radius: 12px;
+                overflow: hidden;
+            }
+            th, td {
+                font-family: Helvetica, sans-serif;
+                font-weight: 100;
+                background-color: #ffffff;
+                padding: 8px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>ESP32 Dashboard</h1>
 
         <h2>Temperature Sensor</h2>
+        <! -- dotted and gradient -->
+        <div id="temperature-outer">
+
+
+        </div>
         <p id="temp-value">Reading...</p>
+
+        <h2>Pin Configuration</h2>
+        <table>
+            <tr>
+                <th>#</th><th>Function</th><th>Value</th>
+            </tr>
+            <! –– %s ––>
+        </table>
+
 
         <h2>Potentiometer</h2>
         <p id="pot-value">Reading...</p>
