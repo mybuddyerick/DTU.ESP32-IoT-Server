@@ -2,7 +2,8 @@
 <html lang="en">
     <head>
         <title>ESP32 Dashboard</title>
-        <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
             body {
                 display: flex;
@@ -10,29 +11,22 @@
                 align-items: center;
                 padding-top: 40px;
                 padding-bottom: 40px;
-                background-color: #e6f2f0;
-            }
-            h1 {
-                font-size: 40px;
                 font-family: Helvetica, sans-serif;
+                background-color: #e6f2f0;
+            }h1 {
+                font-size: 40px;
                 font-weight: 100;
                 letter-spacing: 1px;
-            }
-            h2 {
+            }h2 {
                 font-size: 30px;
-                font-family: Helvetica, sans-serif;
                 font-weight: 100;
-            }
-            p {
+            }p {
                 font-size: 20px;
-                font-family: Helvetica, sans-serif;
                 font-weight: 100;
                 margin: 0;
             }
 
             table {
-                font-family: Helvetica, sans-serif;
-                border-collapse: collapse;
                 border-spacing: 0;
                 width: 50%;
                 margin-top: 0;
@@ -40,12 +34,57 @@
                 box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
                 border-radius: 12px;
                 overflow: hidden;
-            }
-            th, td {
-                font-family: Helvetica, sans-serif;
+                border-collapse: separate;
+            }th, td {
+                border-right: 1px solid rgba(0, 0, 0, 0.1);
                 font-weight: 100;
                 background-color: #ffffff;
                 padding: 8px;
+            }
+
+            .button {
+                position: relative;
+                width: 6vw;
+                height: 6vw;
+                background: linear-gradient(145deg, #dcdcdc, #f6f6f6);
+                border: 1px solid rgba(0, 0, 0, 0.15);
+                border-radius: 10%;
+                margin: 3vh auto;
+                box-shadow:
+                    inset 0 1px 2px rgba(255,255,255,0.6),
+                    inset 0 -1px 2px rgba(0,0,0,0.1),
+                    0 2px 6px rgba(0,0,0,0.1);
+            }.button-center {
+                position: absolute;
+                width: 4vw;
+                height: 4vw;
+                background: radial-gradient(circle at 30% 30%, #656565, #8A8A8A);
+                box-shadow:
+                    inset 0 1px 1px rgba(255,255,255,0.05),
+                    inset 0 -1px 2px rgba(0,0,0,0.3),
+                    0 2px 4px rgba(0,0,0,0.3);
+                border-radius: 100%;
+                right: 17%;
+                bottom: 17%;
+            }.button_corner {
+                position: absolute;
+                width: 18%;
+                height: 18%;
+                background-color: #454545;
+                border: 0;
+                border-radius: 50%;
+            }.top-left {
+                top: 5%;
+                left: 5%;
+            }.top-right {
+                top: 5%;
+                right: 5%;
+            }.bottom-left {
+                bottom: 5%;
+                left: 5%;
+            }.bottom-right {
+                bottom: 5%;
+                right: 5%;
             }
         </style>
     </head>
@@ -54,21 +93,28 @@
         <h1>ESP32 Dashboard</h1>
 
         <h2>Temperature Sensor</h2>
-        <! -- dotted and gradient -->
+        <!-- dotted and gradient -->
         <div id="temperature-outer">
+            <div class="temp-bar">
 
-
+            </div>
         </div>
         <p id="temp-value">Reading...</p>
+        <div class="button">
+            <div class="button-center"></div>
+            <div class="button_corner top-left"></div>
+            <div class="button_corner top-right"></div>
+            <div class="button_corner bottom-left"></div>
+            <div class="button_corner bottom-right"></div>
+        </div>
 
         <h2>Pin Configuration</h2>
         <table>
             <tr>
                 <th>#</th><th>Function</th><th>Value</th>
             </tr>
-            <! –– %s ––>
+            <!-- %s -->
         </table>
-
 
         <h2>Potentiometer</h2>
         <p id="pot-value">Reading...</p>
