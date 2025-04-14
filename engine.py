@@ -1,97 +1,66 @@
-from machine import Pin, I2C, PWM, ADC
+from machine import Pin, ADC, PWM, I2C
 import time
-from mcp9808 import MCP9808
+import mcp9808
 
-# -- I2C & Temp Sensor Setup --
+class ESP32Controller:
+    def __init__(self):
+        self.button = Pin(25, Pin.IN, Pin.PULL_UP)
 
-i2c = I2C(scl=Pin(22), sda=Pin(23))
-sensor = MCP9808(i2c)
+        # RGB LED Pins
+        self.led_pins = {
+            'red': PWM(Pin(12), freq=1000),
+            'green': PWM(Pin(33), freq=1000),
+            'blue': PWM(Pin(15), freq=1000)
+        }
 
-# -- Potentiometer --
+        # Initialize LED state
+        self.led_on = False
 
-pot = ADC(Pin(39))
-pot.atten(ADC.ATTN_11DB)
-pot.width(ADC.WIDTH_12BIT)
+        # Potentiometer
+        self.pot = ADC(Pin(39))
+        self.pot.atten(ADC.ATTN_11DB)
 
-# -- RGB setup --
+        # Temperature Sensor
+        self.i2c = I2C(scl=Pin(22), sda=Pin(23))
+        self.temp_sensor = mcp9808.MCP9808(self.i2c)
 
-red_pwm = PWM(Pin(12), freq=10000)
-green_pwm = PWM(Pin(33), freq=10000)
-blue_pwm = PWM(Pin(15), freq=10000)
+        # Button press state memory
+        self.last_button_state = self.button.value()
 
-# -- RGB color functions --
+    def read_temperature(self):
+        return self.temp_sensor.read_temperature()
 
-def set_green(pwm):
-    red_pwm.duty(pwm)
-    green_pwm.duty(0)
-    blue_pwm.duty(pwm)
+    def read_potentiometer(self):
+        return self.pot.read()
 
-def set_blue(pwm):
-    red_pwm.duty(pwm)
-    green_pwm.duty(pwm)
-    blue_pwm.duty(0)
+    def read_button_state(self):
+        return 0 if self.button.value() else 1  # Inverted logic
 
-def set_red(pwm):
-    red_pwm.duty(0)
-    green_pwm.duty(pwm)
-    blue_pwm.duty(pwm)
+    def toggle_led(self):
+        self.led_on = not self.led_on
+        self.update_led()
 
-def turn_off_led():
-    red_pwm.duty(0)
-    green_pwm.duty(0)
-    blue_pwm.duty(0)
-
-# -- button detection --
-
-button1 = Pin(25, Pin.IN, Pin.PULL_UP)
-button2 = Pin(34, Pin.IN, Pin.PULL_UP)
-
-led_on = True
-prev_button1_state = 1 # not pressed
-
-def toggle_led():
-    global led_on
-    led_on = not led_on
-    if not led_on:
-        turn_off_led()
-
-def update_led_color():
-    pot_val = pot.read()
-    brightness = int((pot_val / 4095) * 1023)
-    temp = sensor.temperature
-    if temp < 26:
-        set_green(brightness)
-    elif temp < 27.5:
-        set_blue(brightness)
-    else:
-        set_red(brightness)
-
-# -- loop --
-
-def run_engine():
-    global prev_button1_state
-    while True:
-        pot_val = pot.read()
-        pwm = pwm = int((pot_val / 4095) * 1023)
-
-        temp = sensor.temperature
-        print(f"\rPotentiometer: {(pot_val/4095)*100:.1f}% | PWM: {pwm} | Temperature: {temp:.1f} °C", end='')
-
-        current_state = button1.value()
-        if prev_button1_state == 1 and current_state == 0:
-            toggle_led()
-        prev_button1_state = current_state
-        button2_state = button2.value()
-
-        if led_on:
-            if temp < 23:
-                set_green(pwm)
-            elif temp < 24.5:
-                set_blue(pwm)
-            else:
-                set_red(pwm)
+    def update_led(self):
+        brightness = self.read_potentiometer() // 4  # Scale 0–1023 to 0–255
+        if self.led_on:
+            self.led_pins['red'].duty(brightness)
+            self.led_pins['green'].duty(0)
+            self.led_pins['blue'].duty(0)
         else:
-            turn_off_led()
-        time.sleep(0.1)
+            for led in self.led_pins.values():
+                led.duty(0)
 
-run_engine()
+    def check_button_toggle(self):
+        current = self.button.value()
+        if self.last_button_state == 1 and current == 0:
+            self.toggle_led()
+            time.sleep_ms(200)  # debounce
+        self.last_button_state = current
+
+    def get_status(self):
+        return {
+            "temperature": self.read_temperature(),
+            "potentiometer": self.read_potentiometer(),
+            "button1": self.read_button_state(),
+            "led_on": self.led_on
+        }

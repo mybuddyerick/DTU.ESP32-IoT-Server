@@ -48,8 +48,8 @@
 
             .button {
                 position: relative;
-                width: 6vw;
-                height: 6vw;
+                width: 80px;
+                height: 80px;
                 background: linear-gradient(145deg, #dcdcdc, #f6f6f6);
                 border: 1px solid rgba(0, 0, 0, 0.15);
                 border-radius: 10%;
@@ -61,16 +61,16 @@
             }
             .button-center {
                 position: absolute;
-                width: 4vw;
-                height: 4vw;
+                width: 55px;
+                height: 55px;
                 background: radial-gradient(circle at 30% 30%, #656565, #8A8A8A);
                 box-shadow:
                     inset 0 1px 1px rgba(255,255,255,0.05),
                     inset 0 -1px 2px rgba(0,0,0,0.3),
                     0 2px 4px rgba(0,0,0,0.3);
                 border-radius: 100%;
-                right: 17%;
-                bottom: 17%;
+                right: 15.5%;
+                bottom: 15.5%;
             }
             .button_corner {
                 position: absolute;
@@ -137,13 +137,32 @@
         <p id="pot-value">Reading...</p>
 
         <script>
-            window.addEventListener('DOMContentLoaded', () => {
-                const button = document.querySelector('.button-center');
-
-                if (window.BUTTON_PRESSED === 1) {
-                    button.classList.add('button-pressed');
+            async function updateDashboard() {
+                try {
+                    const res = await fetch('/api/data');
+                    const data = await res.json();
+        
+                    // Update temperature
+                    document.getElementById("temp-value").textContent = `${data.temperature.toFixed(2)} °C`;
+        
+                    // Update potentiometer
+                    document.getElementById("pot-value").textContent = data.potentiometer;
+        
+                    // Update physical button state
+                    const button = document.querySelector('.button-center');
+                    if (data.button1 === 1) {
+                        button.classList.add('button-pressed');
+                    } else {
+                        button.classList.remove('button-pressed');
+                    }
+        
+                } catch (err) {
+                    console.error("Failed to fetch data:", err);
                 }
-            });
+            }
+        
+            setInterval(updateDashboard, 1000); // Refresh every 1 second
         </script>
+        
     </body>
 </html>

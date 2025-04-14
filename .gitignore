@@ -6,6 +6,7 @@
 # -- custom --
 pymakr.conf
 *.idea
+pymark.conf
 
 # User-specific files
 *.rsuser
