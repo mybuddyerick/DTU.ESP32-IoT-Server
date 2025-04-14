@@ -24,16 +24,15 @@ from engine import ESP32Controller
 
 controller = ESP32Controller()
 
-# Set up WiFi Access Point
+# init WiFi Access Point
 ap = network.WLAN(network.AP_IF)
 ap.active(True)
 ap.config(essid='mini-Markus', authmode=3, password='ra2ra2ra2')
 
-# Serve HTML
 with open('index.html', 'r') as f:
     html_template = f.read()
 
-# Setup socket
+# init Setup socket
 addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
 server = socket.socket()
 server.bind(addr)
@@ -67,7 +66,7 @@ while True:
         cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
         cl.send(response)
     else:
-        html = html_template # If you still use %s for table, otherwise ignore
+        html = html_template
         cl.send("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n")
         cl.sendall(html)
 
