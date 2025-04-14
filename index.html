@@ -130,10 +130,20 @@
             <tr>
                 <th>#</th><th>Function</th><th>Value</th>
             </tr>
-            <!-- %s -->
+            %s
         </table>
 
         <h2>Potentiometer</h2>
         <p id="pot-value">Reading...</p>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const button = document.querySelector('.button-center');
+
+                if (window.BUTTON_PRESSED === 1) {
+                    button.classList.add('button-pressed');
+                }
+            });
+        </script>
     </body>
 </html>
