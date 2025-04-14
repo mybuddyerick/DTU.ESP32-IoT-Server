@@ -41,21 +41,37 @@ class ESP32Controller:
         self.update_led()
 
     def update_led(self):
-        brightness = self.read_potentiometer() // 4  # Scale 0–1023 to 0–255
-        if self.led_on:
+        brightness = self.read_potentiometer() // 4  # Scale 0–4095 to 0–1023
+        temp = self.read_temperature()
+
+        for pwm in self.led_pins.values():
+            pwm.duty(0)
+
+        if not self.led_on:
+            return
+
+        if temp <= 26.5:
             self.led_pins['red'].duty(brightness)
             self.led_pins['green'].duty(0)
+            self.led_pins['blue'].duty(brightness)
+        elif temp <= 27:
+            self.led_pins['red'].duty(brightness)
+            self.led_pins['green'].duty(brightness)
             self.led_pins['blue'].duty(0)
         else:
-            for led in self.led_pins.values():
-                led.duty(0)
+            self.led_pins['red'].duty(0)
+            self.led_pins['green'].duty(brightness)
+            self.led_pins['blue'].duty(brightness)
 
     def check_button_toggle(self):
         current = self.button.value()
         if self.last_button_state == 1 and current == 0:
             self.toggle_led()
-            time.sleep_ms(200)  # debounce
+            time.sleep_ms(100)
         self.last_button_state = current
+
+        self.update_led()
+
 
     def get_rgb_brightness(self):
         return {
