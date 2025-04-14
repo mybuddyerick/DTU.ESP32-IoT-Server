@@ -57,16 +57,27 @@ class ESP32Controller:
             time.sleep_ms(200)  # debounce
         self.last_button_state = current
 
+    def get_rgb_brightness(self):
+        return {
+            "red": self.led_pins['red'].duty(),
+            "green": self.led_pins['green'].duty(),
+            "blue": self.led_pins['blue'].duty()
+        }
+
     def get_status(self):
+        rgb = self.get_rgb_brightness()
         return {
             "temperature": self.read_temperature(),
             "potentiometer": self.read_potentiometer(),
             "button1": self.read_button_state(),
-            "led_on": self.led_on,
+            "rgb_brightness": rgb,
             "pins": [
-                {"pin": 25, "label": "Button 1", "value": self.read_button_state()},
-                {"pin": 12, "label": "Red LED", "value": self.led_on},
-                {"pin": 39, "label": "Potentiometer", "value": self.read_potentiometer()},
+                {"label": "Temperature Sensor - SCL", "pin": 22, "value": "I2C"},
+                {"label": "Temperature Sensor - SDA", "pin": 23, "value": "I2C"},
+                {"label": "Potentiometer", "pin": 39, "value": self.read_potentiometer()},
+                {"label": "RGB LED - Red", "pin": 12, "value": rgb["red"]},
+                {"label": "RGB LED - Green", "pin": 33, "value": rgb["green"]},
+                {"label": "RGB LED - Blue", "pin": 15, "value": rgb["blue"]},
+                {"label": "Button 1", "pin": 25, "value": self.read_button_state()}
             ]
         }
-

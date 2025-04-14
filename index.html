@@ -77,10 +77,12 @@
                 box-shadow:
                     inset 0 1px 1px rgba(255,255,255,0.05),
                     inset 0 -1px 2px rgba(0,0,0,0.3),
-                    0 2px 4px rgba(0,0,0,0.3);
+                    0 2px 4px rgba(0,0,0,0.4);
                 border-radius: 100%;
                 right: 15.5%;
                 bottom: 15.5%;
+                transition: transform 0.08s ease-in, box-shadow 0.12s ease-in-out;
+                transform: translateY(0);
             }
             .button_corner {
                 position: absolute;
@@ -89,6 +91,13 @@
                 background-color: #454545;
                 border: 0;
                 border-radius: 50%;
+            }
+            .button-pressed {
+                transform: translateY(3px) scale(0.96);
+                color: #fff;
+                box-shadow:
+                    inset 0 2px 4px rgba(0,0,0,0.6),
+                    0 1px 1px rgba(0,0,0,0.3);
             }
             .top-left {
                 top: 5%;
@@ -105,13 +114,6 @@
             .bottom-right {
                 bottom: 5%;
                 right: 5%;
-            }
-            .button-pressed {
-                transform: scale(0.92) translateY(-3%);
-                box-shadow:
-                    inset 0 2px 4px rgba(0,0,0,0.5),
-                    0 1px 2px rgba(0,0,0,0.2);
-                transition: all 0.1s ease;
             }
         </style>
     </head>
@@ -155,13 +157,13 @@
                 try {
                     const res = await fetch('/api/data');
                     const data = await res.json();
-        
+
                     // Update temperature
                     document.getElementById("temp-value").textContent = `${data.temperature.toFixed(2)} °C`;
-        
+
                     // Update potentiometer
                     document.getElementById("pot-value").textContent = data.potentiometer;
-        
+
                     // Update physical button state
                     const button = document.querySelector('.button-center');
                     if (data.button1 === 1) {
@@ -169,37 +171,36 @@
                     } else {
                         button.classList.remove('button-pressed');
                     }
-        
+
                     // Update pin configuration table
                     const tableBody = document.getElementById("pin-table");
                     tableBody.innerHTML = "";  // Clear old rows
-        
+
                     data.pins.forEach((entry, index) => {
                         const row = document.createElement("tr");
-        
+
                         const indexCell = document.createElement("td");
-                        indexCell.textContent = index + 1;
-        
+                        indexCell.textContent = entry.pin;
+
                         const labelCell = document.createElement("td");
                         labelCell.textContent = entry.label;
-        
+
                         const valueCell = document.createElement("td");
                         valueCell.textContent = entry.value;
-        
+
                         row.appendChild(indexCell);
                         row.appendChild(labelCell);
                         row.appendChild(valueCell);
-        
+
                         tableBody.appendChild(row);
                     });
-        
+
                 } catch (err) {
                     console.error("Failed to fetch data:", err);
                 }
             }
-        
-            setInterval(updateDashboard, 100); // Update every 100 ms (you can reduce to 500–1000 ms if needed)
+
+            setInterval(updateDashboard, 100);
         </script>
-        
     </body>
 </html>
