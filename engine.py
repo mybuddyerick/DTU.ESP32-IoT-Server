@@ -62,5 +62,11 @@ class ESP32Controller:
             "temperature": self.read_temperature(),
             "potentiometer": self.read_potentiometer(),
             "button1": self.read_button_state(),
-            "led_on": self.led_on
+            "led_on": self.led_on,
+            "pins": [
+                {"pin": 25, "label": "Button 1", "value": self.read_button_state()},
+                {"pin": 12, "label": "Red LED", "value": self.led_on},
+                {"pin": 39, "label": "Potentiometer", "value": self.read_potentiometer()},
+            ]
         }
+

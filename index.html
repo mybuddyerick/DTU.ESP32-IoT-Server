@@ -39,7 +39,17 @@
                 overflow: hidden;
                 border-collapse: separate;
             }
-            th, td {
+            th {
+                background: linear-gradient(180deg, #f0f0f0, #dcdcdc);
+                color: #333;
+                font-weight: bold;
+                padding: 10px;
+                box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.05);
+                text-shadow: 0 1px 0 #fff;
+            }
+
+            td {
                 border-right: 1px solid rgba(0, 0, 0, 0.1);
                 font-weight: 100;
                 background-color: #ffffff;
@@ -127,11 +137,15 @@
 
         <h2>Pin Configuration</h2>
         <table>
-            <tr>
-                <th>#</th><th>Function</th><th>Value</th>
-            </tr>
-            %s
-        </table>
+            <thead>
+                <tr>
+                    <th>#</th><th>Function</th><th>Value</th>
+                </tr>
+            </thead>
+            <tbody id="pin-table">
+                <!-- here pin info goes -->
+            </tbody>
+        </table>        
 
         <h2>Potentiometer</h2>
         <p id="pot-value">Reading...</p>
@@ -156,12 +170,35 @@
                         button.classList.remove('button-pressed');
                     }
         
+                    // Update pin configuration table
+                    const tableBody = document.getElementById("pin-table");
+                    tableBody.innerHTML = "";  // Clear old rows
+        
+                    data.pins.forEach((entry, index) => {
+                        const row = document.createElement("tr");
+        
+                        const indexCell = document.createElement("td");
+                        indexCell.textContent = index + 1;
+        
+                        const labelCell = document.createElement("td");
+                        labelCell.textContent = entry.label;
+        
+                        const valueCell = document.createElement("td");
+                        valueCell.textContent = entry.value;
+        
+                        row.appendChild(indexCell);
+                        row.appendChild(labelCell);
+                        row.appendChild(valueCell);
+        
+                        tableBody.appendChild(row);
+                    });
+        
                 } catch (err) {
                     console.error("Failed to fetch data:", err);
                 }
             }
         
-            setInterval(updateDashboard, 1); // Refresh every 10 ms
+            setInterval(updateDashboard, 100); // Update every 100 ms (you can reduce to 500–1000 ms if needed)
         </script>
         
     </body>
