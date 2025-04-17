@@ -14,14 +14,37 @@
                 font-family: Helvetica, sans-serif;
                 background-color: #e6f2f0;
             }
+            #temperature-outer {
+                width: 300px;
+                height: 20px;
+                background-color: #f0f0f0;
+                border-radius: 10px;
+                margin: 10px 0;
+                overflow: hidden;
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+            }
+            .temp-bar {
+                height: 100%;
+                width: 0%;
+                background: linear-gradient(to right, #4CAF50, #FFEB3B, #F44336);
+                border-radius: 10px;
+                transition: width 0.3s ease-in-out;
+            }
             h1 {
                 font-size: 40px;
                 font-weight: 100;
                 letter-spacing: 1px;
+                background-color: #e2e8e7;
+                padding: 20px;
+                border-radius: 10px;
+                border: 3px solid #cfd9d8;
             }
             h2 {
                 font-size: 30px;
                 font-weight: 100;
+                margin: 0;
+                margin-top: -0px;
+                margin-bottom: 20px;
             }
             p {
                 font-size: 20px;
@@ -32,7 +55,8 @@
             table {
                 border-spacing: 0;
                 width: 50%;
-                margin-top: 0;
+                margin-top: 5px;
+                margin-bottom: 10px;
                 text-align: center;
                 box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
                 border-radius: 12px;
@@ -122,13 +146,14 @@
         <h1>ESP32 Dashboard</h1>
 
         <h2>Temperature Sensor</h2>
-        <!-- dotted and gradient -->
-        <div id="temperature-outer">
-            <div class="temp-bar">
-
-            </div>
-        </div>
         <p id="temp-value">Reading...</p>
+        <div id="temperature-outer">
+            <div class="temp-bar"></div>
+        </div>
+        <div style="width: 300px; display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span>20°C</span>
+            <span>30°C</span>
+        </div>
         <div class="button">
             <div class="button-center"></div>
             <div class="button_corner top-left"></div>
@@ -159,7 +184,16 @@
                     const data = await res.json();
 
                     // Update temperature
-                    document.getElementById("temp-value").textContent = `${data.temperature.toFixed(2)} °C`;
+                    const temp = data.temperature;
+                    document.getElementById("temp-value").textContent = `${temp.toFixed(2)} °C`;
+
+                    // Update temperature bar
+                    const tempBar = document.querySelector('.temp-bar');
+                    // Calculate percentage (0% at 20°C, 100% at 30°C)
+                    let percentage = ((temp - 20) / 10) * 100;
+                    // Clamp percentage between 0 and 100
+                    percentage = Math.max(0, Math.min(100, percentage));
+                    tempBar.style.width = `${percentage}%`;
 
                     // Update potentiometer
                     document.getElementById("pot-value").textContent = data.potentiometer;
