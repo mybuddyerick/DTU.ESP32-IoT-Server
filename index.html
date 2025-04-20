@@ -26,9 +26,9 @@
             .temp-bar {
                 height: 100%;
                 width: 0%;
-                background: linear-gradient(to right, #4CAF50, #FFEB3B, #F44336);
+                background-color: #4AC8DB;
                 border-radius: 10px;
-                transition: width 0.3s ease-in-out;
+                transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
             }
             h1 {
                 font-size: 40px;
@@ -64,13 +64,20 @@
                 border-collapse: separate;
             }
             th {
-                background: linear-gradient(180deg, #f0f0f0, #dcdcdc);
-                color: #333;
-                font-weight: bold;
-                padding: 10px;
-                box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1),
-                0 2px 4px rgba(0, 0, 0, 0.05);
-                text-shadow: 0 1px 0 #fff;
+                background-color: #b0c7c4;
+                color: #2c3e50;
+                font-weight: 500;
+                padding: 12px;
+                text-align: center;
+                border-bottom: 1px solid #b0c5c3;
+            }
+
+            tr:hover th {
+                background-color: #cfe2e0;
+            }
+
+            tr:hover td {
+                background-color: #f4faf9;
             }
 
             td {
@@ -139,6 +146,89 @@
                 bottom: 5%;
                 right: 5%;
             }
+
+            .pot-dial {
+                position: absolute;
+                top: 45%;
+                left: 50%;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                background: radial-gradient(circle at 30% 30%, #333 20%, #555 70%, #2a2a2a 100%);
+                box-shadow:
+                        inset 0 3px 5px rgba(255, 255, 255, 0.2),
+                        inset 0 -3px 5px rgba(0, 0, 0, 0.5),
+                        0 3px 8px rgba(0, 0, 0, 0.3);
+                width: 75px;
+                height: 75px;
+            }
+            .pot-pcb{
+                position: relative;
+                background: linear-gradient(145deg, #A1662F, #b38458);
+                width: 68px;
+                height: 83px;
+                box-shadow:
+                        inset 0 3px 5px rgba(255, 255, 255, 0.2),
+                        inset 0 -3px 5px rgba(0, 0, 0, 0.2),
+                        0 3px 8px rgba(0, 0, 0, 0.15);
+                border-radius: 100% 100% 15% 15%;
+            }
+            .pot-holes{
+                position: fixed;
+                top: -35%;
+                left: -20%;
+                height: 8px;
+                width: 8px;
+                border-radius: 50%;
+                background: linear-gradient(145deg, #dcdcdc, #f6f6f6);
+            }
+            .pot-hole-void{
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: #cfe2e0;
+                border: 1px solid #b0c5c3;
+                border-radius: 50%;
+                top: 12%;
+                left: 15%;
+            }
+            .pot-pin{
+                position: absolute;
+                top: 113%;
+                width: 6px;
+                height: 30px;
+                border-bottom-left-radius: 30%;
+                border-bottom-right-radius: 30%;
+                border-top-left-radius: 10%;
+                border-top-right-radius: 10%;
+                background: linear-gradient(145deg, #dcdcdc, #f6f6f6);
+                border: 1px solid #dcdcdc;
+            }
+            .pot-pin-left{
+                left: 25%;
+                transform: translate(-50%, -50%);
+            }
+            .pot-pin-center{
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .pot-pin-right{
+                position: absolute;
+                left: 75%;
+                transform: translate(-50%, -50%);
+            }
+            .pot-line {
+                position: absolute;
+                top: 87%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #D2042D;
+                border-radius: 10px;
+                width: 6px;
+                height: 20px;
+                transform-origin: center bottom;
+                transition: transform 0.2s ease-out;
+            }
         </style>
     </head>
 
@@ -176,8 +266,35 @@
 
         <h2>Potentiometer</h2>
         <p id="pot-value">Reading...</p>
-
+        <div class="pot-pcb">
+            <div class="pot-pin-left pot-pin">
+                <div class="pot-hole-left pot-holes">
+                    <div class="pot-hole-void"></div>
+                </div>
+            </div>
+            <div class="pot-pin-center pot-pin">
+                <div class="pot-hole-center pot-holes">
+                    <div class="pot-hole-void"></div>
+                </div>
+            </div>
+            <div class="pot-pin-right pot-pin">
+                <div class="pot-hole-right pot-holes">
+                    <div class="pot-hole-void"></div>
+                </div>
+            </div>
+            <div class="pot-dial"></div>
+            <div class="pot-line"></div>
+        </div>
         <script>
+            function getTemperatureColor(temp) {
+                if (temp <= 20) return "#b2dfdb";
+                if (temp <= 22) return "#80cbc4";
+                if (temp <= 24) return "#4db6ac";
+                if (temp <= 26) return "#26a69a";
+                if (temp <= 28) return "#009688";
+                return "#00796b";
+            }
+
             async function updateDashboard() {
                 try {
                     const res = await fetch('/api/data');
@@ -189,14 +306,19 @@
 
                     // Update temperature bar
                     const tempBar = document.querySelector('.temp-bar');
-                    // Calculate percentage (0% at 20°C, 100% at 30°C)
                     let percentage = ((temp - 20) / 10) * 100;
-                    // Clamp percentage between 0 and 100
                     percentage = Math.max(0, Math.min(100, percentage));
                     tempBar.style.width = `${percentage}%`;
+                    tempBar.style.backgroundColor = getTemperatureColor(temp);
 
                     // Update potentiometer
-                    document.getElementById("pot-value").textContent = data.potentiometer;
+                    const potValue = data.potentiometer;
+                    document.getElementById("pot-value").textContent = potValue;
+
+                    // Rotate pot-line based on potValue (0–4095 mapped to 0–270 degrees)
+                    const angle = (potValue / 4095) * 270;
+                    const potLine = document.querySelector('.pot-line');
+                    potLine.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
 
                     // Update physical button state
                     const button = document.querySelector('.button-center');
@@ -208,9 +330,9 @@
 
                     // Update pin configuration table
                     const tableBody = document.getElementById("pin-table");
-                    tableBody.innerHTML = "";  // Clear old rows
+                    tableBody.innerHTML = "";
 
-                    data.pins.forEach((entry, index) => {
+                    data.pins.forEach((entry) => {
                         const row = document.createElement("tr");
 
                         const indexCell = document.createElement("td");
