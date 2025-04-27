@@ -65,6 +65,12 @@ while True:
         response = ujson.dumps(data)
         cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
         cl.send(response)
+    elif '.' in request_path:
+        try:
+            with open(request_path, 'r') as f:
+                cl.send(f.read())
+        except:
+            cl.send("HTTP/1.1 404 NO FILE\r\n\r\n")
     else:
         html = html_template
         cl.send("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n")
