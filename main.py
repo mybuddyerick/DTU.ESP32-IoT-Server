@@ -65,6 +65,9 @@ while True:
         response = ujson.dumps(data)
         cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
         cl.send(response)
+    elif request_path == '/toggle':
+        controller.toggle_led()
+        cl.send("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nLED toggled")
     elif '.' in request_path:
         try:
             with open(request_path, 'r') as f:

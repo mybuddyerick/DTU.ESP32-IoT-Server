@@ -70,3 +70,11 @@ async function updateDashboard() {
 }
 
 setInterval(updateDashboard, 200);
+
+document.querySelector('.button-center').addEventListener('click', async () => {
+    try {
+        await fetch('/toggle');
+    } catch (err) {
+        console.error('Failed to send toggle request:', err);
+    }
+});

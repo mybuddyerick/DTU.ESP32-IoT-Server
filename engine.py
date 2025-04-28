@@ -34,7 +34,7 @@ class ESP32Controller:
         return self.pot.read()
 
     def read_button_state(self):
-        return 0 if self.button.value() else 1  # Inverted logic
+        return 0 if self.button.value() else 1
 
     def toggle_led(self):
         self.led_on = not self.led_on
@@ -69,7 +69,6 @@ class ESP32Controller:
             self.toggle_led()
             time.sleep_ms(100)
         self.last_button_state = current
-
         self.update_led()
 
 
