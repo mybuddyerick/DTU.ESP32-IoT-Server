@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/9ea39d49-e732-4c1a-9bd7-f9d72f1e6d4d" alt="Logo" height="140">
+</div>
+
 # ESP32 IoT Web Server Project
 
 This project implements a simple **Internet-of-Things (IoT)** node using an **Adafruit Feather Huzzah32 (ESP32)** board and **MicroPython**.  
@@ -81,7 +85,7 @@ Example response (`/api/temperature`):
 
 ---
 
-## 🌎 Web API Endpoints
+## 🖥️ Web API Endpoints
 
 | Path | Purpose | Response |
 |:----|:--------|:---------|
@@ -116,11 +120,14 @@ Example response (`/api/temperature`):
 
 ## 🧠 Lessons Learned
 
-- Setting up a WiFi server on embedded hardware.
-- Designing and handling HTTP requests manually.
-- Using JSON for efficient IoT communication.
-- Controlling hardware outputs remotely over HTTP.
-- Building user-friendly web interfaces for IoT devices.
+- Setting up a WiFi server on embedded hardware (ESP32).
+- Designing and handling raw HTTP requests manually without using a full web framework.
+- Using JSON as an efficient, machine-readable communication format.
+- Creating a RESTful Web API for modular data and command handling.
+- Controlling hardware outputs remotely via HTTP requests.
+- Building a dynamic, real-time web dashboard using JavaScript (AJAX fetch) to update sensor data without refreshing the page.
+- Styling a responsive and user-friendly website using CSS, including custom designs for buttons, progress bars, and tables.
+- Integrating front-end technologies (HTML, CSS, JavaScript) with back-end MicroPython services for a complete IoT solution.
 
 ---
 
@@ -138,7 +145,7 @@ Example response (`/api/temperature`):
 ---
 
 # ✍️ Authors
-- **Markus Kassen**
+- **Markus Lassen**
 - **Eirik Sigurstein**
 - **Karl Lankots**
 - *02135 - Introduction to Cyber Systems, Spring 2025*
