@@ -65,9 +65,36 @@ while True:
         response = ujson.dumps(data)
         cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
         cl.send(response)
+
+    elif request_path == '/api/pins':
+        response = ujson.dumps(controller.get_status()["pins"])
+        cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
+        cl.send(response)
+
+    elif request_path == '/api/temperature':
+        response = ujson.dumps({"temperature": controller.read_temperature()})
+        cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
+        cl.send(response)
+
+    elif request_path == '/api/potentiometer':
+        response = ujson.dumps({"potentiometer": controller.read_potentiometer()})
+        cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
+        cl.send(response)
+
+    elif request_path == '/api/button1':
+        response = ujson.dumps({"button1": controller.read_button_state()})
+        cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
+        cl.send(response)
+
+    elif request_path == '/api/rgb':
+        response = ujson.dumps(controller.get_rgb_brightness())
+        cl.send("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n")
+        cl.send(response)
+
     elif request_path == '/toggle':
         controller.toggle_led()
         cl.send("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nLED toggled")
+
     elif '.' in request_path:
         try:
             with open(request_path, 'r') as f:
