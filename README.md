@@ -2,7 +2,7 @@
   <img src="https://github.com/user-attachments/assets/9ea39d49-e732-4c1a-9bd7-f9d72f1e6d4d" alt="Logo" height="140">
 </div>
 
-# ESP32 IoT Web Server Project
+<h1 align="center">02135 Introduction to Cyber Systems - ESP32 IoT Web Server Project</h1>
 
 This project implements a simple **Internet-of-Things (IoT)** node using an **Adafruit Feather Huzzah32 (ESP32)** board and **MicroPython**.  
 It serves a **web dashboard** to monitor sensors and control outputs remotely, using **WiFi** communication and a **Web API** with **JSON** responses.
@@ -11,7 +11,7 @@ Project completed as part of **Assignment 4** in the course *02135 - Introductio
 
 ---
 
-## 🛠 Setup and How to Use
+## Setup and How to Use
 
 1. **Upload all project files** (`main.py`, `engine.py`, `mcp9808.py`, `index.html`, `style.css`, `updater.js`) with Pymakr.
 2. **Power the ESP32** and connect to its WiFi network:
@@ -28,7 +28,7 @@ Project completed as part of **Assignment 4** in the course *02135 - Introductio
 
 ---
 
-## 📄 Project Structure
+## Project Structure
 
 | File | Purpose |
 |:----|:--------|
@@ -41,7 +41,7 @@ Project completed as part of **Assignment 4** in the course *02135 - Introductio
 
 ---
 
-## 📋 Tasks
+## Tasks
 
 ### Task 1: WiFi Web Server Setup
 - Configured the ESP32 as a **WiFi access point**.
@@ -85,7 +85,7 @@ Example response (`/api/temperature`):
 
 ---
 
-## 🖥️ Web API Endpoints
+## Web API Endpoints
 
 | Path | Purpose | Response |
 |:----|:--------|:---------|
@@ -99,7 +99,7 @@ Example response (`/api/temperature`):
 
 ---
 
-## 📈 Features
+## Features
 
 - **Real-time updates** (no page reload needed).
 - **Clean and styled dashboard**.
@@ -110,7 +110,7 @@ Example response (`/api/temperature`):
 
 ---
 
-## ⚡ Technical Requirements
+## Technical Requirements
 
 - **Board:** Adafruit Feather Huzzah32 (ESP32)
 - **Language:** MicroPython
@@ -118,7 +118,7 @@ Example response (`/api/temperature`):
 
 ---
 
-## 🧠 Lessons Learned
+## Summary
 
 - Setting up a WiFi server on embedded hardware (ESP32).
 - Designing and handling raw HTTP requests manually without using a full web framework.
@@ -131,7 +131,7 @@ Example response (`/api/temperature`):
 
 ---
 
-# 📝 How to Test
+# How to Test
 
 1. Connect to the ESP32 WiFi (`mini-Markus`).
 2. Visit `http://192.168.4.1`.
@@ -144,7 +144,7 @@ Example response (`/api/temperature`):
 
 ---
 
-# ✍️ Authors
+# Authors
 - **Markus Lassen**
 - **Eirik Sigurstein**
 - **Karl Lankots**
